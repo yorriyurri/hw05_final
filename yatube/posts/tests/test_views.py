@@ -188,17 +188,24 @@ class PostsViewsTests(TestCase):
         content_3 = third_response.content
         self.assertNotEqual(content_1, content_3)
 
-    def test_authorized_client_can_follow_and_unfollow(self):
+    def test_authorized_client_can_follow(self):
+        """Авторизованный пользователь может подписываться на других пользователей."""
+        self.authorized_client.get(reverse(
+            'posts:profile_follow',
+            kwargs={'username': self.user_2.username}
+        ))
+        subscribe = Follow.objects.get(user=self.user)
+        self.assertEqual(self.user_2, subscribe.author)
+
+    def test_authorized_client_can_unfollow(self):
         """
-        Авторизованный пользователь может подписываться на других
-        пользователей и удалять их из подписок.
+        Авторизованный пользователь может удалять из подписок других пользователей.
         """
         self.authorized_client.get(reverse(
             'posts:profile_follow',
             kwargs={'username': self.user_2.username}
         ))
-        follower = Follow.objects.get(user=self.user)
-        self.assertEqual(self.user_2, follower.author)
+        Follow.objects.get(user=self.user)
         one_follower = Follow.objects.count()
         self.authorized_client.get(reverse(
             'posts:profile_unfollow',

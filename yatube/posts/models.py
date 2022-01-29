@@ -33,11 +33,11 @@ class Post(models.Model):
         blank=True
     )
 
-    def __str__(self):
-        return self.text
-
     class Meta:
         ordering = ['-pub_date']
+
+    def __str__(self):
+        return self.text
 
 
 class Comment(models.Model):
@@ -68,3 +68,8 @@ class Follow(models.Model):
         related_name='following',
         null=True
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'], name='unique subscription'),
+        ]

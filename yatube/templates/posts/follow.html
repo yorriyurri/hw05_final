@@ -9,6 +9,7 @@
 {% block content %}
 <div class="container py-5">     
   <h1>Посты авторов, на которых Вы подписаны</h1>
+  {% include 'posts/includes/switcher.html' %}
   {% cache 20 follow_page page_obj.number%}
     {% for post in page_obj %}
       <article>

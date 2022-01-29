@@ -4,7 +4,6 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import cache_page
 
-
 from .forms import CommentForm, PostForm
 from .models import Follow, Group, Post, User
 
@@ -13,7 +12,7 @@ from .models import Follow, Group, Post, User
 def index(request):
     """Главная страница."""
     template = 'posts/index.html'
-    post_list = Post.objects.all()
+    post_list = Post.objects.select_related('group').all()
     paginator = Paginator(post_list, settings.PER_PAGE_COUNT)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -45,12 +44,9 @@ def profile(request, username):
     paginator = Paginator(posts, settings.PER_PAGE_COUNT)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    following = False
-    if request.user.is_authenticated:
-        if Follow.objects.filter(
+    following = request.user.is_authenticated and Follow.objects.filter(
             author=user, user=request.user
-        ).exists():
-            following = True
+        ).exists()
     context = {
         'author': user,
         'page_obj': page_obj,
@@ -89,6 +85,7 @@ def post_create(request):
     return render(request, template, context)
 
 
+@login_required
 def post_edit(request, post_id):
     is_edit = True
     post = get_object_or_404(Post, pk=post_id)
@@ -140,13 +137,8 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    is_follower = Follow.objects.filter(
-        author=author,
-        user=request.user
-    ).exists()
-    if is_follower or (author == request.user):
-        return redirect('posts:profile', username=username)
-    Follow.objects.create(
+    if author != request.user:
+        Follow.objects.get_or_create(
         author=author,
         user=request.user
     )

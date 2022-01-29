@@ -145,7 +145,8 @@ class PostFormTests(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse('posts:post_detail', kwargs={'post_id': self.post_1.id})
+            reverse('users:login') + '?next='
+            + reverse('posts:post_edit', kwargs={'post_id': self.post_1.id})
         )
         self.assertEqual(Post.objects.count(), posts_count)
         edited_post = Post.objects.get(id=self.post_1.id)
@@ -199,7 +200,6 @@ class PostFormTests(TestCase):
         comments_count = Comment.objects.count()
         comment_form = {
             'post': self.post_1,
-            'author': self.user,
             'text': 'Текст тестового комментария.',
         }
         self.authorized_client.post(
@@ -211,8 +211,6 @@ class PostFormTests(TestCase):
             follow=True,
         )
         self.assertEqual(Comment.objects.count(), comments_count + 1)
-        self.assertTrue(Comment.objects.filter(
-            post=self.post_1,
-            author=self.user,
-            text='Текст тестового комментария.'
-        ).exists())
+        created_comment = Comment.objects.last()
+        self.assertEqual(created_comment.post, comment_form['post'])
+        self.assertEqual(created_comment.text, comment_form['text'])
