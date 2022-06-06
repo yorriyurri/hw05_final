@@ -23,12 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '2u^4rfld4%h7oe4o=o9)nha+_js*)46680%lt287_2*z^@&um='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '51.250.100.30',
+    'yorriyurriblog.myftp.org',
     '[::1]',
     'testserver',
     'yori.pythonanywhere.com',
