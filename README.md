@@ -1,3 +1,68 @@
-# hw05_final
+# Социальная сеть Yatube
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+Yatube - социальная сеть, где пользователи размещают посты в блогах.
+
+## Описание
+
+В проекте реализовано:
+* Регистрация авторов
+* Публикация постов
+* Выбор тематической группы для созданных постов
+* Загрузка изображение при создании / редактировании постов
+* Подписка на любимых авторов
+* Комментирование опубликованных потсов
+* Функция кеширования
+
+## Использованные технологии:
+
+* Python 3.9
+* Django 2.2.16
+
+## Запуск проекта:
+
+### Клонировать репозиторий:
+
+```python
+git@github.com:yorriyurri/hw05_final.git
+```
+
+### Cоздать и активировать виртуальное окружение:
+
+```python
+python3 -m venv venv
+
+source venv/bin/activate
+```
+
+### Установить зависимости:
+
+```python
+python3 -m pip install --upgrade pip
+
+pip install -r requirements.txt
+```
+
+### Применить миграции:
+
+```python
+python manage.py makemigration
+
+python manage.py migrate
+```
+
+### Создание суперпользователя:
+```python
+python manage.py createsuperuser
+```
+
+### Запуск проекта локально:
+
+```python
+python manage.py runserver
+```
+
+## Автор
+
+Студент 29 когорты Факультета Бэкэнд-разработки, Яндекс.Практикум:
+
+* Ивайкин Юрий
